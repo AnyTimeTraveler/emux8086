@@ -1,11 +1,12 @@
-mod emux8086;
-
-use crate::emux8086::{INSTRUCTIONS, Computer, CPU};
 use std::fs::File;
 use std::io::Read;
 
+use crate::emux8086::{Computer, CPU, INSTRUCTIONS};
+
+mod emux8086;
+
 fn main() {
-    let mut file = File::open("fun").expect("Error opening file!");
+    let mut file = File::open("asm/copy").expect("Error opening file!");
 
     let mut computer = Computer {
         cpu: CPU {
@@ -30,17 +31,12 @@ fn main() {
 
     let read = file.read(&mut computer.memory).expect("Error reading file!");
 
-    let mut counter = 0usize;
+    let mut c = &mut computer;
+    while c.cpu.ip < read as u16 {
+        let instruction = &INSTRUCTIONS[c.memory[c.cpu.ip as usize] as usize];
+        c = (instruction.execute)(c);
 
-    while counter < read {
-        let inst = &INSTRUCTIONS[computer.memory[counter] as usize];
-        counter += 1;
-        print!("{:4}", inst.name);
-        for _ in 0..inst.args {
-            print!(" {:3}", computer.memory[counter]);
-            counter += 1;
-        }
-        println!();
+
     }
 }
 
