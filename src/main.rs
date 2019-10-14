@@ -5,7 +5,7 @@ use std::fs::File;
 use std::io::Read;
 
 fn main() {
-    let mut file = File::open("copy").expect("Error opening file!");
+    let mut file = File::open("fun").expect("Error opening file!");
 
     let mut computer = Computer {
         cpu: CPU {
@@ -36,11 +36,7 @@ fn main() {
         let inst = &INSTRUCTIONS[computer.memory[counter] as usize];
         counter += 1;
         print!("{:4}", inst.name);
-        if !inst.args[0].is_empty() {
-            print!(" {:3}", computer.memory[counter]);
-            counter += 1;
-        }
-        if !inst.args[1].is_empty() {
+        for _ in 0..inst.args {
             print!(" {:3}", computer.memory[counter]);
             counter += 1;
         }
