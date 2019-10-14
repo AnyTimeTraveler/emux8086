@@ -1,68 +1,3 @@
-<html>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>80x86 Instructions by Opcode</title>
-<link rel="STYLESHEET" type="text/css" href="css/xpolecat.css">
-<link rel="STYLESHEET" type="text/css" href="css/ie.content.books24x7.css">
-</head>
-<body >
-<hr size="1">
-<br><div class="appendix">
-
-<a name="ap-e"></a>
-
-<h1 class="appendix-title">
-80x86 Instructions by Opcode</h1>
-
-<a name="756"></a><a name="page469"></a>
-
-<div class="informaltable">
-
-<table border="0">
-
-<thead>
-
-<tr valign="top">
-
-<th class="th" scope="col" align="left">
-
-<p class="table-para">Opcode</p>
-
-</th><th class="th" scope="col" align="left">
-
-<p class="table-para">Mnemonic</p>
-
-</th><th class="th" scope="col" align="left">
-
-<p class="table-para">Operand(s)</p>
-
-</th><th class="th" scope="col" align="left">
-
-<p class="table-para">Flags affected</p>
-
-</th><th class="th" scope="col" align="left">
-
-<p class="table-para">Number of bytes</p>
-
-</th><th class="th" scope="col" align="left">
-
-<p class="table-para">Timing 386</p>
-
-</th><th class="th" scope="col" align="left">
-
-<p class="table-para">Timing 486</p>
-
-</th><th class="th" scope="col" align="left">
-
-<p class="table-para">Timing Pentium</p>
-
-</th>
-
-</tr>
-
-</thead>
-
-<tbody>
-
 fn instruction_add (&mut Computer) -> &mut Computer {
 let opcode = 00;
  // Args: mem8,reg8
@@ -73,19 +8,10 @@ computer }
 fn instruction_add (&mut Computer) -> &mut Computer {
 let opcode = 01;
  // Args: mem16,reg16
+    // Args: mem32,reg32
  // Flags: SF,ZF,OF,CF,PF,AF
  // Bytes: 2+
 computer }
-
-<tr valign="top">
-
-<td class="td" align="left"> </td><td class="td" align="left"> </td><td class="td" align="left">
-
-<p class="table-para">mem32,reg32</p>
-
-</td><td class="td" align="left"> </td><td class="td" align="left"> </td><td class="td" align="left"> </td><td class="td" align="left"> </td><td class="td" align="left"> </td>
-
-</tr>
 
 fn instruction_add (&mut Computer) -> &mut Computer {
 let opcode = 02;
