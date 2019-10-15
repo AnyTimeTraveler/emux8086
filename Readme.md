@@ -14,6 +14,9 @@ The first instructions can already execute, but nothing has been tested, yet.
 
 # Documentation about the 8086
 
+![Visual Opcode Reference](https://pnx.tf/files/x86_opcode_structure_and_instruction_overview.png)
+
+ - [Opcode decoding](http://www.c-jump.com/CIS77/CPU/x86/lecture.html)
  - [Complete 8086 instruction set](https://www.gabrielececchetti.it/Teaching/CalcolatoriElettronici/Docs/i8086_instruction_set.pdf)
  - [Official Intel documentation](http://peter.rta.lv/macibas/datoru_arhitektura/intelarch.pdf)
  - [Decoding Instructions and parameters](http://www.mathemainzel.info/files/x86asmref.html)

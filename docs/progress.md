@@ -273,3 +273,5 @@
 | 0xFD   | STD         | [ ]         | [ ]    |
 | 0xFE   | GRP4        | [ ]         | [ ]    |
 | 0xFF   | GRP5        | [ ]         | [ ]    |
+
+![Opcode chart](https://pnx.tf/files/x86_opcode_structure_and_instruction_overview.png)
