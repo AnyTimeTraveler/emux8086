@@ -3,14 +3,14 @@
 
 This is a work in progress project to create a simple 8086 emulator in Rust.
 
-## Todo list
- - ~~decoding instructions~~
- - decoding instruction parameters
- - executing instructions
- - emulating I/O
- - deciding on an interface
- - anything to do with the interrupts system
- - ...
+# Progress
+
+All in all, the project is about 10% done.
+
+The first instructions can already execute, but nothing has been tested, yet.
+
+
+[More Details here](docs/progress.md)
 
 # Documentation about the 8086
 
