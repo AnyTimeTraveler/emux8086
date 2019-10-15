@@ -1,8 +1,8 @@
-use crate::emux8086::register::Memory;
+use crate::emux8086::memory::{Memory, Register};
 
 pub mod utils;
 pub mod instructions;
-pub mod register;
+pub mod memory;
 
 pub struct Computer {
     pub cpu: CPU,
@@ -22,22 +22,22 @@ impl Computer {
 
 pub struct CPU {
     // general purpose registers
-    pub ax: Memory,
-    pub bx: Memory,
-    pub cx: Memory,
-    pub dx: Memory,
+    pub ax: Register,
+    pub bx: Register,
+    pub cx: Register,
+    pub dx: Register,
 
     // stack pointer
-    pub sp: Memory,
+    pub sp: Register,
     // base pointer
-    pub bp: Memory,
+    pub bp: Register,
     // source index
-    pub si: Memory,
+    pub si: Register,
     // destination index
-    pub di: Memory,
+    pub di: Register,
 
     // instruction pointer
-    pub ip: Memory,
+    pub ip: Register,
 
     // alu flags
     /*
@@ -58,16 +58,16 @@ pub struct CPU {
     14: unused
     15: Carry
     */
-    pub flags: Memory,
+    pub flags: Register,
 
     // code segment
-    pub cs: Memory,
+    pub cs: Register,
     // stack segment
-    pub ss: Memory,
+    pub ss: Register,
     // data segment
-    pub ds: Memory,
+    pub ds: Register,
     // extra segment
-    pub es: Memory,
+    pub es: Register,
 }
 
 impl CPU {
