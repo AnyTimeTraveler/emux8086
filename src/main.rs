@@ -1,46 +1,30 @@
 mod emux8086;
 
-use crate::emux8086::{INSTRUCTIONS, Computer, CPU};
+use emux8086::Computer;
+use emux8086::instructions::INSTRUCTIONS;
+use emux8086::utils::u8_as_hex;
 use std::fs::File;
 use std::io::Read;
+use crate::emux8086::utils::print_registers;
 
 fn main() {
-    let mut file = File::open("fun").expect("Error opening file!");
+    let mut file = File::open("asm/copy").expect("Error opening file!");
 
-    let mut computer = Computer {
-        cpu: CPU {
-            ax: [0u8; 2],
-            bx: [0u8; 2],
-            cx: [0u8; 2],
-            dx: [0u8; 2],
-            sp: 0,
-            bp: 0,
-            si: 0,
-            di: 0,
-            ip: 0,
-            flags: [false; 16],
-            cs: 0,
-            ss: 0,
-            ds: 0,
-            es: 0,
-        },
-        memory: [0u8; 1_048_576],
-        io: [0u8; 65_536],
-    };
+    let mut computer = Computer::new();
 
-    let read = file.read(&mut computer.memory).expect("Error reading file!");
+    let _read = file.read(&mut computer.memory).expect("Error reading file!");
 
-    let mut counter = 0usize;
-
-    while counter < read {
-        let inst = &INSTRUCTIONS[computer.memory[counter] as usize];
-        counter += 1;
-        print!("{:4}", inst.name);
-        for _ in 0..inst.args {
-            print!(" {:3}", computer.memory[counter]);
-            counter += 1;
-        }
+    loop {
+        let inst = &INSTRUCTIONS[computer.memory[computer.cpu.ip as usize] as usize];
+        print!("{:5} {}", inst.name, u8_as_hex(inst.code));
+        (inst.execute)(&mut computer);
+        computer.cpu.ip += inst.ip_change as u16;
         println!();
+        if inst.ip_change == 0 {
+            println!("\n\n\n\n{} is not implemented!", inst.name);
+            return;
+        }
+        print_registers(&computer);
     }
 }
 
