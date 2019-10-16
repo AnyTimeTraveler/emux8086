@@ -1,21 +1,35 @@
-use crate::emux8086::Computer;
-use crate::emux8086::memory::{Memory, Register};
+use crate::emux8086::computer::Computer;
 
-pub fn mov_byte_mem_to_reg(src: &Memory, src_pos: usize, dst: &mut Register, dst_pos: usize) {
-    dst.write_byte_at(src[src_pos],dst_pos);
+pub fn as_u16(data: &[u8], pos: u16) -> u16 {
+    ((data[(pos + 1) as usize] as u16) << 8) | data[pos as usize] as u16
 }
 
-pub fn mov_word_mem_to_reg(src: &Memory, src_pos: usize, dst: &mut Register) {
-    dst.write(src[src_pos],0);
+pub fn read_word(src: &[u8], pos: usize) -> u16 {
+    ((src[pos] as u16) << 8) | src[pos + 1] as u16
+}
+pub fn read_double_word(src: &[u8], pos: usize) -> u32 {
+    ((read_word(src, pos) as u32) << 16) | read_word(src, pos + 2) as u32
+}
+pub fn read_quad_word(src: &[u8], pos: usize) -> u64 {
+    ((read_double_word(src, pos) as u64) << 32) | read_double_word(src,pos + 4) as u64
 }
 
-pub fn mov_byte_reg_to_mem(src: &Register, src_pos: usize, dst: &mut Memory, dst_pos: usize) {
-    dst.write_byte_at(src.read_byte_at(src_pos), dst_pos);
+pub fn write_word(dst: &mut [u8], pos: usize, data: u16) {
+    for i in 0..2 {
+        dst[pos + i] = (data >> (i * 8) as u16) as u8;
+    }
 }
 
-pub fn mov_word_reg_to_mem(src: &Register, dst: &mut Memory, dst_pos: usize) {
-    dst.write_byte_at(src.read_low_byte(), dst_pos);
-    dst.write_byte_at(src.read_high_byte(), dst_pos+1);
+pub fn write_double_word(dst: &mut [u8], pos: usize, data: u32) {
+    for i in 0..4 {
+        dst[pos + i] = (data >> (i * 8) as u32) as u8;
+    }
+}
+
+pub fn write_quad_word(dst: &mut [u8], pos: usize, data: u64) {
+    for i in 0..8 {
+        dst[pos + i] = (data >> (i * 8) as u64) as u8;
+    }
 }
 
 pub fn u16_as_hex(data: u16) -> String {
@@ -33,9 +47,23 @@ pub fn print_registers(computer: &Computer) {
         \tBX {}|{}\n\
         \tCX {}|{}\n\
         \tDX {}|{}\n",
-        u8_as_hex(computer.cpu.ax[1]), u8_as_hex(computer.cpu.ax[0]),
-        u8_as_hex(computer.cpu.bx[1]), u8_as_hex(computer.cpu.bx[0]),
-        u8_as_hex(computer.cpu.cx[1]), u8_as_hex(computer.cpu.cx[0]),
-        u8_as_hex(computer.cpu.dx[1]), u8_as_hex(computer.cpu.dx[0])
+        u8_as_hex(*computer.registers.ah), u8_as_hex(*computer.registers.al),
+        u8_as_hex(*computer.registers.bh), u8_as_hex(*computer.registers.bl),
+        u8_as_hex(*computer.registers.ch), u8_as_hex(*computer.registers.cl),
+        u8_as_hex(*computer.registers.dh), u8_as_hex(*computer.registers.dl)
+    )
+}
+
+pub fn new_print_registers(computer: &Computer) {
+    println!(
+        "Registers:\n\
+        \tAX {:02x}|{:02x}\n\
+        \tBX {:02x}|{:02x}\n\
+        \tCX {:02x}|{:02x}\n\
+        \tDX {:02x}|{:02x}\n",
+        *computer.registers.ah, *computer.registers.al,
+        *computer.registers.bh, *computer.registers.bl,
+        *computer.registers.ch, *computer.registers.cl,
+        *computer.registers.dh, *computer.registers.dl
     )
 }
