@@ -1,32 +1,32 @@
-pub struct Registers {
+pub struct Registers<'a> {
     // general purpose registers
-    pub ax: &'static mut [u8],
-    pub al: &'static mut u8,
-    pub ah: &'static mut u8,
+    pub ax: &'a mut [u8],
+    pub al: &'a mut u8,
+    pub ah: &'a mut u8,
 
-    pub bx: &'static mut [u8],
-    pub bl: &'static mut u8,
-    pub bh: &'static mut u8,
+    pub bx: &'a mut [u8],
+    pub bl: &'a mut u8,
+    pub bh: &'a mut u8,
 
-    pub cx: &'static mut [u8],
-    pub cl: &'static mut u8,
-    pub ch: &'static mut u8,
+    pub cx: &'a mut [u8],
+    pub cl: &'a mut u8,
+    pub ch: &'a mut u8,
 
-    pub dx: &'static mut [u8],
-    pub dl: &'static mut u8,
-    pub dh: &'static mut u8,
+    pub dx: &'a mut [u8],
+    pub dl: &'a mut u8,
+    pub dh: &'a mut u8,
 
     // stack pointer
-    pub sp: &'static mut [u8],
+    pub sp: &'a mut [u8],
     // base pointer
-    pub bp: &'static mut [u8],
+    pub bp: &'a mut [u8],
     // source index
-    pub si: &'static mut [u8],
+    pub si: &'a mut [u8],
     // destination index
-    pub di: &'static mut [u8],
+    pub di: &'a mut [u8],
 
     // instruction pointer
-    pub ip: &'static mut [u8],
+    pub ip: &'a mut [u8],
 
     // alu flags
     /*
@@ -47,54 +47,54 @@ pub struct Registers {
     14: unused
     15: Carry
     */
-    pub flags: &'static mut [u8],
+    pub flags: &'a mut [u8],
 
     // code segment
-    pub cs: &'static mut [u8],
+    pub cs: &'a mut [u8],
     // stack segment
-    pub ss: &'static mut [u8],
+    pub ss: &'a mut [u8],
     // data segment
-    pub ds: &'static mut [u8],
+    pub ds: &'a mut [u8],
     // extra segment
-    pub es: &'static mut [u8],
+    pub es: &'a mut [u8],
 
-    pub raw: [u8;26],
+    pub raw: &'a mut [u8; 26],
 }
 
-impl Registers {
+impl <'a>Registers<'a> {
     pub(crate) fn new() -> Self {
-        let mut registers = [0u8;26];
+        let mut registers = [0u8; 26];
         Registers {
-            raw: registers,
+            raw: &mut registers,
 
-            ax:&mut registers[0..2],
-            al:&mut registers[0],
-            ah:&mut registers[1],
+            ax: &mut registers[0..2],
+            al: &mut registers[0],
+            ah: &mut registers[1],
 
-            cx:&mut registers[2..4],
-            cl:&mut registers[2],
-            ch:&mut registers[3],
+            cx: &mut registers[2..4],
+            cl: &mut registers[2],
+            ch: &mut registers[3],
 
-            dx:&mut registers[4..6],
-            dl:&mut registers[4],
-            dh:&mut registers[5],
+            dx: &mut registers[4..6],
+            dl: &mut registers[4],
+            dh: &mut registers[5],
 
-            bx:&mut registers[6..8],
-            bl:&mut registers[6],
-            bh:&mut registers[7],
+            bx: &mut registers[6..8],
+            bl: &mut registers[6],
+            bh: &mut registers[7],
 
-            sp:&mut registers[8..10],
-            bp:&mut registers[10..12],
-            si:&mut registers[12..14],
-            di:&mut registers[14..16],
+            sp: &mut registers[8..10],
+            bp: &mut registers[10..12],
+            si: &mut registers[12..14],
+            di: &mut registers[14..16],
 
-            ip:&mut registers[14..16],
-            flags:&mut registers[16..18],
+            ip: &mut registers[14..16],
+            flags: &mut registers[16..18],
 
-            cs:&mut registers[18..20],
-            ss:&mut registers[20..22],
-            ds:&mut registers[22..24],
-            es:&mut registers[24..26],
+            cs: &mut registers[18..20],
+            ss: &mut registers[20..22],
+            ds: &mut registers[22..24],
+            es: &mut registers[24..26],
         }
     }
 }
