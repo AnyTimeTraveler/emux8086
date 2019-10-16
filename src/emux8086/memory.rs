@@ -72,6 +72,13 @@ impl Register {
         self.raw[0] = src as u8;
         self.raw[1] = (src >> 8) as u8;
     }
+
+    pub fn point_to_low_byte(&self) -> &mut u8 {
+        &mut self.raw[0]
+    }
+    pub fn point_to_high_byte(&self) -> &mut u8 {
+        &mut self.raw[1]
+    }
 }
 
 impl From<Register> for u16 {

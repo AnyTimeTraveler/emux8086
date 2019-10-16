@@ -3,6 +3,7 @@ use crate::emux8086::memory::{Memory, Register};
 pub mod utils;
 pub mod instructions;
 pub mod memory;
+pub mod modbyte;
 
 pub struct Computer {
     pub cpu: CPU,

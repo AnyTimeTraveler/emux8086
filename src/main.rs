@@ -33,5 +33,3 @@ fn main() {
         print_registers(&computer);
     }
 }
-
-
