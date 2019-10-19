@@ -15,10 +15,10 @@ pub fn print_registers(computer: &Computer) {
         \tBX {}|{}\n\
         \tCX {}|{}\n\
         \tDX {}|{}\n",
-        u8_as_hex(*computer.registers.ah), u8_as_hex(*computer.registers.al),
-        u8_as_hex(*computer.registers.bh), u8_as_hex(*computer.registers.bl),
-        u8_as_hex(*computer.registers.ch), u8_as_hex(*computer.registers.cl),
-        u8_as_hex(*computer.registers.dh), u8_as_hex(*computer.registers.dl)
+        u8_as_hex(computer.registers.read_u8(computer.registers.ah)), u8_as_hex(computer.registers.read_u8(computer.registers.al)),
+        u8_as_hex(computer.registers.read_u8(computer.registers.bh)), u8_as_hex(computer.registers.read_u8(computer.registers.bl)),
+        u8_as_hex(computer.registers.read_u8(computer.registers.ch)), u8_as_hex(computer.registers.read_u8(computer.registers.cl)),
+        u8_as_hex(computer.registers.read_u8(computer.registers.dh)), u8_as_hex(computer.registers.read_u8(computer.registers.dl))
     )
 }
 
@@ -29,9 +29,9 @@ pub fn new_print_registers(computer: &Computer) {
         \tBX {:02x}|{:02x}\n\
         \tCX {:02x}|{:02x}\n\
         \tDX {:02x}|{:02x}\n",
-        *computer.registers.ah, *computer.registers.al,
-        *computer.registers.bh, *computer.registers.bl,
-        *computer.registers.ch, *computer.registers.cl,
-        *computer.registers.dh, *computer.registers.dl
+        computer.registers.read_u8(computer.registers.ah), computer.registers.read_u8(computer.registers.al),
+        computer.registers.read_u8(computer.registers.bh), computer.registers.read_u8(computer.registers.bl),
+        computer.registers.read_u8(computer.registers.ch), computer.registers.read_u8(computer.registers.cl),
+        computer.registers.read_u8(computer.registers.dh), computer.registers.read_u8(computer.registers.dl)
     )
 }

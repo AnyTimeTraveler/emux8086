@@ -1,10 +1,9 @@
 use crate::emux8086::mod_byte::AddressingMode::{FourByteSignedDisplacement, IndirectAddressingMode, OneByteSignedDisplacement, RegisterAddressingMode};
 use crate::emux8086::mod_byte::InstructionWidth::{EightBits, SixteenBits};
 use crate::emux8086::registers::Registers;
-use crate::emux8086::utils::as_u16;
 
 #[derive(PartialEq)]
-enum AddressingMode {
+pub enum AddressingMode {
     IndirectAddressingMode,
     OneByteSignedDisplacement,
     FourByteSignedDisplacement,
@@ -12,40 +11,38 @@ enum AddressingMode {
 }
 
 #[derive(PartialEq)]
-enum InstructionWidth {
+pub enum InstructionWidth {
     EightBits,
     SixteenBits,
     ThirtyTwoBits,
 }
 
-pub fn decode_mod_byte(byte: u8, registers: &Registers, width: InstructionWidth) {
-    let mod_bits = byte & 0b11000000;
-    let mode = match mod_bits {
+pub fn read_mode(byte: u8) -> AddressingMode {
+    match byte & 0b11000000 {
         0b11000000 => RegisterAddressingMode,
         0b10000000 => FourByteSignedDisplacement,
         0b01000000 => OneByteSignedDisplacement,
         0b00000000 => IndirectAddressingMode,
         _ => panic!("Logic error!")
-    };
+    }
+}
 
-    let reg = byte & 0b00111000;
-
-    let mut register = if width == EightBits {
-        // TODO: Replace by formula using registers.raw ?
-        match reg {
-            0b00000000 => &mut registers.ax[0..1],
-            0b00001000 => &mut registers.cx[0..1],
-            0b00010000 => &mut registers.dx[0..1],
-            0b00011000 => &mut registers.bx[0..1],
-            0b00100000 => &mut registers.ax[1..2],
-            0b00101000 => &mut registers.cx[1..2],
-            0b00110000 => &mut registers.dx[1..2],
-            0b00111000 => &mut registers.bx[1..2],
+pub fn read_reg(byte:u8, registers: &Registers, width: InstructionWidth) -> usize{
+    let reg_bits = byte & 0b00111000;
+    if width == EightBits {
+        match reg_bits {
+            0b00000000 => registers.al,
+            0b00001000 => registers.cl,
+            0b00010000 => registers.dl,
+            0b00011000 => registers.bl,
+            0b00100000 => registers.ah,
+            0b00101000 => registers.ch,
+            0b00110000 => registers.dh,
+            0b00111000 => registers.bh,
             _ => panic!("Logic error!")
         }
     } else if width == SixteenBits {
-        // TODO: Replace by formula using registers.raw ?
-        match reg {
+        match reg_bits {
             0b00000000 => registers.ax,
             0b00001000 => registers.cx,
             0b00010000 => registers.dx,
@@ -57,8 +54,6 @@ pub fn decode_mod_byte(byte: u8, registers: &Registers, width: InstructionWidth)
             _ => panic!("Logic error!")
         }
     } else {
-        unimplemented!();
-    };
-
-    println!("{:02x}",as_u16(register,0));
+        panic!("Logic error!")
+    }
 }

@@ -1,32 +1,34 @@
-pub struct Registers<'a> {
+use crate::emux8086::utils::read_word;
+
+pub struct Registers {
     // general purpose registers
-    pub ax: &'a mut [u8],
-    pub al: &'a mut u8,
-    pub ah: &'a mut u8,
+    pub ax: usize,
+    pub al: usize,
+    pub ah: usize,
 
-    pub bx: &'a mut [u8],
-    pub bl: &'a mut u8,
-    pub bh: &'a mut u8,
+    pub bx: usize,
+    pub bl: usize,
+    pub bh: usize,
 
-    pub cx: &'a mut [u8],
-    pub cl: &'a mut u8,
-    pub ch: &'a mut u8,
+    pub cx: usize,
+    pub cl: usize,
+    pub ch: usize,
 
-    pub dx: &'a mut [u8],
-    pub dl: &'a mut u8,
-    pub dh: &'a mut u8,
+    pub dx: usize,
+    pub dl: usize,
+    pub dh: usize,
 
     // stack pointer
-    pub sp: &'a mut [u8],
+    pub sp: usize,
     // base pointer
-    pub bp: &'a mut [u8],
+    pub bp: usize,
     // source index
-    pub si: &'a mut [u8],
+    pub si: usize,
     // destination index
-    pub di: &'a mut [u8],
+    pub di: usize,
 
     // instruction pointer
-    pub ip: &'a mut [u8],
+    pub ip: usize,
 
     // alu flags
     /*
@@ -47,54 +49,74 @@ pub struct Registers<'a> {
     14: unused
     15: Carry
     */
-    pub flags: &'a mut [u8],
+    pub flags: usize,
 
     // code segment
-    pub cs: &'a mut [u8],
+    pub cs: usize,
     // stack segment
-    pub ss: &'a mut [u8],
+    pub ss: usize,
     // data segment
-    pub ds: &'a mut [u8],
+    pub ds: usize,
     // extra segment
-    pub es: &'a mut [u8],
+    pub es: usize,
 
-    pub raw: &'a mut [u8; 26],
+    pub raw: [u8; 28],
 }
 
-impl <'a>Registers<'a> {
+impl Registers {
     pub(crate) fn new() -> Self {
-        let mut registers = [0u8; 26];
         Registers {
-            raw: &mut registers,
+            raw: [0u8; 28],
 
-            ax: &mut registers[0..2],
-            al: &mut registers[0],
-            ah: &mut registers[1],
+            ax: 0,
+            al: 0,
+            ah: 1,
 
-            cx: &mut registers[2..4],
-            cl: &mut registers[2],
-            ch: &mut registers[3],
+            cx: 2,
+            cl: 2,
+            ch: 3,
 
-            dx: &mut registers[4..6],
-            dl: &mut registers[4],
-            dh: &mut registers[5],
+            dx: 4,
+            dl: 4,
+            dh: 5,
 
-            bx: &mut registers[6..8],
-            bl: &mut registers[6],
-            bh: &mut registers[7],
+            bx: 6,
+            bl: 6,
+            bh: 7,
 
-            sp: &mut registers[8..10],
-            bp: &mut registers[10..12],
-            si: &mut registers[12..14],
-            di: &mut registers[14..16],
+            sp: 8,
+            bp: 10,
+            si: 12,
+            di: 14,
 
-            ip: &mut registers[14..16],
-            flags: &mut registers[16..18],
+            ip: 16,
+            flags: 18,
 
-            cs: &mut registers[18..20],
-            ss: &mut registers[20..22],
-            ds: &mut registers[22..24],
-            es: &mut registers[24..26],
+            cs: 20,
+            ss: 22,
+            ds: 24,
+            es: 26,
         }
+    }
+
+    pub fn point_to_byte(&self, pos: usize) -> &[u8] {
+        &self.raw[pos..pos + 1]
+    }
+    pub fn mut_point_to_byte(&mut self, pos: usize) -> &mut [u8] {
+        &mut self.raw[pos..pos + 1]
+    }
+
+    pub fn point_to_word(&self, pos: usize) -> &[u8] {
+        &self.raw[pos..pos + 2]
+    }
+    pub fn mut_point_to_word(&mut self, pos: usize) -> &mut [u8] {
+        &mut self.raw[pos..pos + 2]
+    }
+
+    pub fn read_u16(&self, register: usize) -> u16 {
+        read_word(&self.raw[register..register + 2])
+    }
+    pub fn read_u8(&self, register: usize) -> u8 {
+        self.raw[register]
     }
 }
