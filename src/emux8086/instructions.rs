@@ -198,15 +198,7 @@ pub static INSTRUCTIONS: &'static [Instruction] = &[
     Instruction { code: 0xB9, name: "MOV", args: ["CX", "Iv"], ip_change: 3, execute: |computer: &mut Computer| { mov(&computer.memory, computer.registers.read_u16(computer.registers.ip) + 1, computer.registers.mut_point_to_word(computer.registers.cx), 0, 2); } },
     Instruction { code: 0xBA, name: "MOV", args: ["DX", "Iv"], ip_change: 3, execute: |computer: &mut Computer| { mov(&computer.memory, computer.registers.read_u16(computer.registers.ip) + 1, computer.registers.mut_point_to_word(computer.registers.dx), 0, 2); } },
     Instruction { code: 0xBB, name: "MOV", args: ["BX", "Iv"], ip_change: 3, execute: |computer: &mut Computer| { mov(&computer.memory, computer.registers.read_u16(computer.registers.ip) + 1, computer.registers.mut_point_to_word(computer.registers.bx), 0, 2); } },
-    Instruction {
-        code: 0xBC,
-        name: "MOV",
-        args: ["SP", "Iv"],
-        ip_change: 3,
-        execute: |computer: &mut Computer| {
-            mov(&computer.memory, computer.registers.read_u16(computer.registers.ip) + 1, computer.registers.mut_point_to_word(computer.registers.sp), 0, 2);
-        },
-    },
+    Instruction { code: 0xBC, name: "MOV", args: ["SP", "Iv"], ip_change: 3, execute: |computer: &mut Computer| { mov(&computer.memory, computer.registers.read_u16(computer.registers.ip) + 1, computer.registers.mut_point_to_word(computer.registers.sp), 0, 2); } },
     Instruction { code: 0xBD, name: "MOV", args: ["BP", "Iv"], ip_change: 3, execute: |computer: &mut Computer| { mov(&computer.memory, computer.registers.read_u16(computer.registers.ip) + 1, computer.registers.mut_point_to_word(computer.registers.bp), 0, 2); } },
     Instruction { code: 0xBE, name: "MOV", args: ["SI", "Iv"], ip_change: 3, execute: |computer: &mut Computer| { mov(&computer.memory, computer.registers.read_u16(computer.registers.ip) + 1, computer.registers.mut_point_to_word(computer.registers.si), 0, 2); } },
     Instruction { code: 0xBF, name: "MOV", args: ["DI", "Iv"], ip_change: 3, execute: |computer: &mut Computer| { mov(&computer.memory, computer.registers.read_u16(computer.registers.ip) + 1, computer.registers.mut_point_to_word(computer.registers.di), 0, 2); } },
