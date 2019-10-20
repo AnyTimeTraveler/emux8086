@@ -1,6 +1,7 @@
 use crate::emux8086::mod_byte::AddressingMode::{FourByteSignedDisplacement, IndirectAddressingMode, OneByteSignedDisplacement, RegisterAddressingMode};
 use crate::emux8086::mod_byte::InstructionWidth::{EightBits, SixteenBits};
 use crate::emux8086::registers::Registers;
+use crate::emux8086::utils::read_word;
 
 #[derive(PartialEq)]
 pub enum AddressingMode {
@@ -14,7 +15,6 @@ pub enum AddressingMode {
 pub enum InstructionWidth {
     EightBits,
     SixteenBits,
-    ThirtyTwoBits,
 }
 
 pub fn read_mode(byte: u8) -> AddressingMode {
@@ -27,7 +27,7 @@ pub fn read_mode(byte: u8) -> AddressingMode {
     }
 }
 
-pub fn read_reg(byte:u8, registers: &Registers, width: InstructionWidth) -> usize{
+pub fn read_reg(byte: u8, registers: &Registers, width: InstructionWidth) -> usize {
     let reg_bits = byte & 0b00111000;
     if width == EightBits {
         match reg_bits {
@@ -55,5 +55,46 @@ pub fn read_reg(byte:u8, registers: &Registers, width: InstructionWidth) -> usiz
         }
     } else {
         panic!("Logic error!")
+    }
+}
+
+pub fn read_rm(memory: &[u8], byte: u8, registers: &Registers) -> u16 {
+    let ip = registers.read_u16(registers.ip);
+    let disp8 = memory[ip as usize + 2] as u16;
+    let disp16 = read_word(&memory[ip as usize + 2..]);
+
+    match byte & 0b11000111 {
+        0b00000000 => registers.read_u16(registers.bx) + registers.read_u16(registers.si), // [ BX + SI ]
+        0b01000000 => registers.read_u16(registers.bx) + registers.read_u16(registers.si) + disp8, // [ BX + SI + disp8 ]
+        0b10000000 => registers.read_u16(registers.bx) + registers.read_u16(registers.si) + disp16, // [ BP + SI + disp16 ]
+
+        0b00000001 => registers.read_u16(registers.bx) + registers.read_u16(registers.di), // [ BX + DI ]
+        0b01000001 => registers.read_u16(registers.bx) + registers.read_u16(registers.di) + disp8, // [ BX + DI + disp8 ]
+        0b10000001 => registers.read_u16(registers.bx) + registers.read_u16(registers.di) + disp16, // [ BX + DI + disp16 ]
+
+        0b00000010 => registers.read_u16(registers.bp) + registers.read_u16(registers.si), // [ BP + SI ]
+        0b01000010 => registers.read_u16(registers.bp) + registers.read_u16(registers.si) + disp8, // [ BP + SI + disp8 ]
+        0b10000010 => registers.read_u16(registers.bp) + registers.read_u16(registers.si) + disp16, // [ BP + SI + disp16 ]
+
+        0b00000011 => registers.read_u16(registers.bp) + registers.read_u16(registers.di), // [ BP + DI ]
+        0b01000011 => registers.read_u16(registers.bp) + registers.read_u16(registers.di) + disp8, // [ BP + DI + disp8 ]
+        0b10000011 => registers.read_u16(registers.bp) + registers.read_u16(registers.di) + disp16, // [ BP + DI + disp16 ]
+
+        0b00000100 => registers.read_u16(registers.si), // [ SI ]
+        0b01000100 => registers.read_u16(registers.si) + disp8, // [ SI  +  disp8 ]
+        0b10000100 => registers.read_u16(registers.si) + disp16, // [ SI  +  disp16 ]
+
+        0b00000101 => registers.read_u16(registers.di), // [ DI ]
+        0b01000101 => registers.read_u16(registers.di) + disp8, // [ DI + disp8 ]
+        0b10000101 => registers.read_u16(registers.di) + disp16, // [ DI + disp16 ]
+
+        0b00000110 => disp16, // [ disp16 ]
+        0b01000110 => registers.read_u16(registers.bp) + disp8, // [ BP + disp8 ]
+        0b10000110 => registers.read_u16(registers.bp) + disp16, // [ BP + disp16 ]
+
+        0b00000111 => registers.read_u16(registers.bx), // [BX]
+        0b01000111 => registers.read_u16(registers.bx) + disp8, // [ BX + disp8 ]
+        0b10000111 => registers.read_u16(registers.bx) + disp16, // [ BX + disp16 ]
+        _ => panic!("Logic error!")
     }
 }
