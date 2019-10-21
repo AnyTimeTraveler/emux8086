@@ -1,4 +1,4 @@
-use crate::emux8086::mod_byte::AddressingMode::{FourByteSignedDisplacement, IndirectAddressingMode, OneByteSignedDisplacement, RegisterAddressingMode};
+use crate::emux8086::mod_byte::AddressingMode::{TwoByteSignedDisplacement, IndirectAddressingMode, OneByteSignedDisplacement, RegisterAddressingMode};
 use crate::emux8086::mod_byte::InstructionWidth::{EightBits, SixteenBits};
 use crate::emux8086::registers::Registers;
 use crate::emux8086::utils::read_word;
@@ -7,7 +7,7 @@ use crate::emux8086::utils::read_word;
 pub enum AddressingMode {
     IndirectAddressingMode,
     OneByteSignedDisplacement,
-    FourByteSignedDisplacement,
+    TwoByteSignedDisplacement,
     RegisterAddressingMode,
 }
 
@@ -17,12 +17,18 @@ pub enum InstructionWidth {
     SixteenBits,
 }
 
+#[derive(PartialEq)]
+pub enum DataDirection {
+    RegToMem,
+    MemToReg,
+}
+
 pub fn read_mode(byte: u8) -> AddressingMode {
     match byte & 0b11000000 {
-        0b11000000 => RegisterAddressingMode,
-        0b10000000 => FourByteSignedDisplacement,
-        0b01000000 => OneByteSignedDisplacement,
         0b00000000 => IndirectAddressingMode,
+        0b01000000 => OneByteSignedDisplacement,
+        0b10000000 => TwoByteSignedDisplacement,
+        0b11000000 => RegisterAddressingMode,
         _ => panic!("Logic error!")
     }
 }
@@ -58,8 +64,9 @@ pub fn read_reg(byte: u8, registers: &Registers, width: InstructionWidth) -> usi
     }
 }
 
-pub fn read_rm(memory: &[u8], byte: u8, registers: &Registers) -> u16 {
+pub fn get_rm_index(memory: &[u8], registers: &Registers) -> u16 {
     let ip = registers.read_u16(registers.ip);
+    let byte = registers.read_u8((ip + 1) as usize);
     let disp8 = memory[ip as usize + 2] as u16;
     let disp16 = read_word(&memory[ip as usize + 2..]);
 

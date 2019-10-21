@@ -1,13 +1,15 @@
+#![allow(dead_code)]
 use crate::emux8086::debug::{u16_as_hex, u8_as_hex};
 use crate::emux8086::instructions::INSTRUCTIONS;
 use crate::emux8086::registers::Registers;
-use crate::emux8086::utils::{read_word, write_word};
+use crate::emux8086::utils::write_word;
 
 mod utils;
 mod instructions;
 mod registers;
 mod mod_byte;
 mod instruction_implementations;
+mod alu;
 pub mod debug;
 
 pub struct Computer {
@@ -34,7 +36,7 @@ impl Computer {
         let ip = self.registers.read_u16(self.registers.ip);
         let inst = &INSTRUCTIONS[self.memory[ip as usize] as usize];
         println!("IP: 0x{}", u16_as_hex(ip));
-        print!("0x{:3}: {:5} | {:5} {:5}", u8_as_hex(inst.code), inst.name, u8_as_hex(self.memory[ip as usize + 1]), u8_as_hex(self.memory[ip as usize + 2]));
+        print!("0x{:3}: {} {} {} | {:5} {:5}", u8_as_hex(inst.code), inst.name, inst.args[0],inst.args[1],u8_as_hex(self.memory[ip as usize + 1]), u8_as_hex(self.memory[ip as usize + 2]));
 
         (inst.execute)(self);
 
@@ -44,10 +46,10 @@ impl Computer {
             panic!("\n\n\n\
             ==========================\
             \n\n\
-            {} is not implemented!\
+            0x{}  {} is not implemented!\
             \n\n\
             ==========================\
-            \n\n\n\n", inst.name);
+            \n\n\n\n", u8_as_hex(inst.code), inst.name);
         }
     }
 }
