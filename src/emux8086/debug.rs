@@ -8,7 +8,7 @@ pub fn u8_as_hex(data: u8) -> String {
     format!("{:01$X}", data, 2)
 }
 
-pub fn new_print_registers(computer: &Computer) {
+pub fn print_registers(computer: &Computer) {
     println!(
         "Registers:\n\
         \tAX {:02x}|{:02x}\n\

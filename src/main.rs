@@ -3,7 +3,7 @@ use std::io::Read;
 
 use emux8086::Computer;
 
-use crate::emux8086::debug::{print_registers, new_print_registers};
+use crate::emux8086::debug::print_registers;
 
 mod emux8086;
 
@@ -23,6 +23,5 @@ fn main() {
     loop {
         computer.step();
         print_registers(&computer);
-        new_print_registers(&computer);
     }
 }
