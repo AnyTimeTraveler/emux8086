@@ -1,6 +1,57 @@
 use crate::emux8086::Computer;
 use crate::emux8086::instruction_implementations::mov;
 
+///
+/// # Argument Addressing Codes
+///
+/// | ARG | Info  |
+/// |:---:|:------|
+/// | A | Direct address. The instruction has no ModR/M byte; the address of the operand is encoded in the instruction. Applicable, e.g., to far JMP (opcode EA). |
+/// | E | A ModR/M byte follows the opcode and specifies the operand. The operand is either a general-purpose register or a memory address. If it is a memory address, the address is computed from a segment register and any of the following values: a base register, an index register, a displacement. |
+/// | G | The reg field of the ModR/M byte selects a general register. |
+/// | I | Immediate data. The operand value is encoded in subsequent bytes of the instruction. |
+/// | J | The instruction contains a relative offset to be added to the address of the subsequent instruction. Applicable, e.g., to short JMP (opcode EB), or LOOP. |
+/// | M | The ModR/M byte may refer only to memory. Applicable, e.g., to LES and LDS. |
+/// | O | The instruction has no ModR/M byte; the offset of the operand is encoded as a WORD in the instruction. Applicable, e.g., to certain MOVs (opcodes A0 through A3). |
+/// | S | The reg field of the ModR/M byte selects a segment register. |
+///
+/// # Argument Operand Codes
+///
+/// | ARG | Info  |
+/// |:---:|:------|
+/// | 0 | Byte argument. Unusual in that arguments of this type are suppressed in ASM output when they have the default value of 10 (0xA). Applicable, e.g., to AAM and AAD. |
+/// | b | Byte argument. |
+/// | p | 32-bit segment:offset pointer. |
+/// | w | Word argument. |
+///
+/// # Special Argument Codes
+///
+/// | ARG | Info  |
+/// |:---:|:------|
+/// | AL | 8-bit register: The low byte of AX |
+/// | CL | 8-bit register: The low byte of CX |
+/// | DL | 8-bit register: The low byte of DX |
+/// | BL | 8-bit register: The low byte of BX |
+/// | AH | 8-bit register: The high byte of AX |
+/// | CH | 8-bit register: The high byte of CX |
+/// | DH | 8-bit register: The high byte of DX |
+/// | BH | 8-bit register: The high byte of BX |
+/// | AX | 16-bit register: The 'accumulator' register |
+/// | CX | 16-bit register: The 'counter' register |
+/// | DX | 16-bit register: The 'data' register |
+/// | BX | 16-bit register: The 'base' register |
+/// | SP | 16-bit register: The 'stack pointer' register |
+/// | BP | 16-bit register: The 'base pointer' register |
+/// | SI | 16-bit register: The 'source index' register |
+/// | DI | 16-bit register: The 'destination index' register |
+/// | ES | 16-bit register: The 'extra' segment register |
+/// | CS | 16-bit register: The 'code' segment register |
+/// | SS | 16-bit register: The 'stack' segment register |
+/// | DS | 16-bit register: The 'data' segment register |
+/// | 1 | A constant argument of 1, implicit in the opcode, and not represented elsewhere in the instruction. This argument *is* displayed in assembly code. |
+/// | 3 | A constant argument of 3, implicit in the opcode, and not represented elsewhere in the instruction. This argument *is* displayed in assembly code. |
+/// | M | The ModR/M byte refers to a memory location, however the contents of that memory location are irrelevant; the address itself is the operand of the instruction. Applicable, e.g., to LEA. |
+///
 pub struct Instruction {
     pub code: u8,
     pub name: &'static str,
