@@ -1,6 +1,6 @@
 use crate::emux8086::alu::add;
 use crate::emux8086::utils::write_word;
-use crate::emux8086::debug::u16_as_hex;
+
 
 fn expect_add_u8(operand_a: u8, operand_b: u8, result: u8) {
     let src = [operand_a as u8; 1];
