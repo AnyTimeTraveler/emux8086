@@ -11,6 +11,8 @@ mod mod_byte;
 mod instruction_implementations;
 mod alu;
 pub mod debug;
+#[cfg(test)]
+mod tests;
 
 pub struct Computer {
     pub registers: Registers,
