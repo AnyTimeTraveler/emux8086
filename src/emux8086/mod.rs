@@ -48,7 +48,7 @@ impl Computer {
 
         write_word(self.registers.mut_point_to_word(self.registers.ip), ip + inst.ip_change as u16);
         println!();
-        if inst.ip_change == 0 {
+        if inst.ip_change == 255 {
             panic!("\n\n\n\
             ==========================\
             \n\n\
