@@ -1,3 +1,4 @@
+use std::num::Wrapping;
 
 pub fn add(src: &[u8], dst: &mut [u8]) {
     let mut overflow = false;
@@ -9,6 +10,6 @@ pub fn add(src: &[u8], dst: &mut [u8]) {
             Some(_) => false,
             None => true,
         };
-        dst[i] = dst[i] + src[i];
+        dst[i] = (Wrapping(dst[i]) + Wrapping(src[i])).0;
     }
 }
