@@ -3,6 +3,7 @@ use crate::emux8086::debug::{u16_as_hex, u8_as_hex};
 use crate::emux8086::instructions::INSTRUCTIONS;
 use crate::emux8086::registers::Registers;
 use crate::emux8086::utils::write_word;
+use crate::emux8086::instruction_implementations::jmp;
 
 mod utils;
 mod instructions;
@@ -46,7 +47,8 @@ impl Computer {
 
         (inst.execute)(&mut self.io, &mut self.memory, &mut self.registers);
 
-        write_word(self.registers.mut_point_to_word(self.registers.ip), ip + inst.ip_change as u16);
+        jmp(&mut self.registers, inst.ip_change as usize);
+//        write_word(self.registers.mut_point_to_word(self.registers.ip), self.registers.read_u16(self.registers.ip) + inst.ip_change as u16);
         println!();
         if inst.ip_change == 255 {
             panic!("\n\n\n\

@@ -1,4 +1,3 @@
-
 pub fn read_word(src: &[u8]) -> u16 {
     ((src[1] as u16) << 8) | src[0] as u16
 }
@@ -26,6 +25,14 @@ pub fn write_double_word(dst: &mut [u8], data: u32) {
 pub fn write_quad_word(dst: &mut [u8], data: u64) {
     for i in 0..8 {
         dst[i] = (data >> (i * 8) as u64) as u8;
+    }
+}
+
+
+pub fn fill_msb(bytes: &mut [u8], starting_size: usize) {
+    let use_ones_to_fill = bytes[starting_size - 1] & 0b10000000 == 0b10000000;
+    for i in starting_size..bytes.len() {
+        bytes[i] = if use_ones_to_fill { 0xFF } else { 0x00 };
     }
 }
 

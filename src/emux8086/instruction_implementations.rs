@@ -1,7 +1,9 @@
+use crate::emux8086::alu::add;
+use crate::emux8086::debug::u16_as_hex;
 use crate::emux8086::Memory;
 use crate::emux8086::mod_byte::{DataDirection, get_rm_index, InstructionWidth, read_reg};
-use crate::emux8086::alu::add;
 use crate::emux8086::registers::Registers;
+use crate::emux8086::utils::{fill_msb, read_word, write_word};
 
 pub fn mov(src: &[u8], src_pos: u16, dst: &mut [u8], dst_pos: u16, count: u8) {
     for i in 0..count as u16 {
@@ -10,7 +12,7 @@ pub fn mov(src: &[u8], src_pos: u16, dst: &mut [u8], dst_pos: u16, count: u8) {
 }
 
 
-pub fn add_based_on_modrm_byte(memory: &mut Memory,registers: &mut Registers, width: InstructionWidth, direction: DataDirection) {
+pub fn add_based_on_modrm_byte(memory: &mut Memory, registers: &mut Registers, width: InstructionWidth, direction: DataDirection) {
     let ip = registers.read_u16(registers.ip) as usize;
     let rm_index = get_rm_index(&*memory, &registers) as usize;
     let reg_index = read_reg(memory[ip + 1], &registers, &width);
@@ -25,5 +27,10 @@ pub fn add_based_on_modrm_byte(memory: &mut Memory,registers: &mut Registers, wi
 }
 
 pub fn jmp(registers: &mut Registers, change: usize) {
-
+    let mut change_bytes = [0u8; 2];
+    write_word(&mut change_bytes, change as u16);
+    fill_msb(&mut change_bytes, 1);
+//    println!("\nIP: {}\nChange: {}", u16_as_hex(read_word(registers.point_to_word(registers.ip))), read_word(&change_bytes) as i16);
+    add(&change_bytes, registers.mut_point_to_word(registers.ip));
+//    println!("New IP: {}", u16_as_hex(read_word(registers.point_to_word(registers.ip))));
 }
