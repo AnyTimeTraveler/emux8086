@@ -16,9 +16,13 @@ mod tests;
 
 pub struct Computer {
     pub registers: Registers,
-    pub memory: [u8; 1_048_576],
-    pub io: [u8; 65_536],
+    pub memory: Memory,
+    pub io: IO,
 }
+
+type Memory = [u8; 1_048_576];
+type IO = [u8; 65_536];
+
 
 impl Computer {
     pub fn new() -> Self {
@@ -40,7 +44,7 @@ impl Computer {
         println!("IP: 0x{}", u16_as_hex(ip));
         print!("0x{:3}: {} {} {} | {:5} {:5}", u8_as_hex(inst.code), inst.name, inst.args[0],inst.args[1],u8_as_hex(self.memory[ip as usize + 1]), u8_as_hex(self.memory[ip as usize + 2]));
 
-        (inst.execute)(self);
+        (inst.execute)(&mut self.io, &mut self.memory, &mut self.registers);
 
         write_word(self.registers.mut_point_to_word(self.registers.ip), ip + inst.ip_change as u16);
         println!();
