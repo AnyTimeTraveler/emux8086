@@ -1,9 +1,10 @@
 #![allow(dead_code)]
-use crate::emux8086::debug::{u16_as_hex, u8_as_hex};
-use crate::emux8086::instructions::INSTRUCTIONS;
-use crate::emux8086::registers::Registers;
-use crate::emux8086::utils::write_word;
-use crate::emux8086::instruction_implementations::jmp;
+
+use crate::cpu::registers::Registers;
+use crate::cpu::utils::write_word;
+use crate::cpu::instructions::INSTRUCTIONS;
+use crate::cpu::debug::{u16_as_hex, u8_as_hex};
+use crate::cpu::instruction_implementations::jmp;
 
 mod utils;
 mod instructions;
@@ -12,8 +13,6 @@ mod mod_byte;
 mod instruction_implementations;
 mod alu;
 pub mod debug;
-#[cfg(test)]
-mod tests;
 
 pub struct Computer {
     pub registers: Registers,

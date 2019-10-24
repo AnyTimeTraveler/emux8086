@@ -1,8 +1,8 @@
-use crate::emux8086::alu::add;
-use crate::emux8086::Memory;
-use crate::emux8086::mod_byte::{DataDirection, get_rm_index, InstructionWidth, read_reg};
-use crate::emux8086::registers::Registers;
-use crate::emux8086::utils::{fill_msb, write_word};
+use crate::cpu::Memory;
+use crate::cpu::registers::Registers;
+use crate::cpu::mod_byte::{InstructionWidth, DataDirection, get_rm_index, read_reg};
+use crate::cpu::alu::add;
+use crate::cpu::utils::{write_word, fill_msb};
 
 pub fn mov(src: &[u8], src_pos: u16, dst: &mut [u8], dst_pos: u16, count: u8) {
     for i in 0..count as u16 {

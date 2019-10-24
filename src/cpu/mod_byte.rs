@@ -1,7 +1,7 @@
-use crate::emux8086::mod_byte::AddressingMode::{TwoByteSignedDisplacement, IndirectAddressingMode, OneByteSignedDisplacement, RegisterAddressingMode};
-use crate::emux8086::mod_byte::InstructionWidth::{EightBits, SixteenBits};
-use crate::emux8086::registers::Registers;
-use crate::emux8086::utils::read_word;
+use crate::cpu::mod_byte::AddressingMode::{IndirectAddressingMode, OneByteSignedDisplacement, TwoByteSignedDisplacement, RegisterAddressingMode};
+use crate::cpu::registers::Registers;
+use crate::cpu::mod_byte::InstructionWidth::{EightBits, SixteenBits};
+use crate::cpu::utils::read_word;
 
 #[derive(PartialEq)]
 pub enum AddressingMode {

@@ -1,27 +1,24 @@
-use std::fs::File;
-use std::io::Read;
+mod cpu;
+mod peripherals;
 
-use emux8086::Computer;
+#[cfg(test)]
+mod tests;
 
-use crate::emux8086::debug::print_registers;
-
-mod emux8086;
 
 fn main() {
-    let mut file = File::open("asm/copy").expect("Error opening file!");
+    tui::start().expect("TUI Error");
+//    let mut file = File::open("asm/copy").expect("Error opening file!");
 
-    let mut computer = Computer::new();
+//    let mut computer = Computer::new();
 
-    let mut program_data = [0u8; 1024];
+//    let mut program_data = [0u8; 1024];
 
-    let read = file.read(&mut program_data).expect("Error reading file!");
+//    let read = file.read(&mut program_data).expect("Error reading file!");
 
-    println!("{} bytes loaded!", read);
+//    println!("{} bytes loaded!", read);
 
-    computer.load_program(&program_data);
+//    computer.load_program(&program_data);
 
-    loop {
-        computer.step();
-        print_registers(&computer);
-    }
+//            computer.step();
+//        print_registers(&computer);
 }

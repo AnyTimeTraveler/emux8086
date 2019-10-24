@@ -1,4 +1,4 @@
-use crate::emux8086::Computer;
+use crate::cpu::Computer;
 
 pub fn u16_as_hex(data: u16) -> String {
     format!("{:01$X}", data, 4)

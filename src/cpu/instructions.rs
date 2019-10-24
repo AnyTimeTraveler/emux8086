@@ -1,9 +1,9 @@
-use crate::emux8086::{IO, Memory};
-use crate::emux8086::alu::add;
-use crate::emux8086::instruction_implementations::{add_based_on_modrm_byte, jmp, mov};
-use crate::emux8086::mod_byte::DataDirection::{MemToReg, RegToMem};
-use crate::emux8086::mod_byte::InstructionWidth::{EightBits, SixteenBits};
-use crate::emux8086::registers::Registers;
+use crate::cpu::{IO, Memory};
+use crate::cpu::registers::Registers;
+use crate::cpu::instruction_implementations::{add_based_on_modrm_byte, mov, jmp};
+use crate::cpu::alu::add;
+use crate::cpu::mod_byte::InstructionWidth::{SixteenBits, EightBits};
+use crate::cpu::mod_byte::DataDirection::{MemToReg, RegToMem};
 
 ///
 /// # Argument Addressing Codes

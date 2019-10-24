@@ -1,4 +1,4 @@
-use crate::emux8086::utils::read_word;
+use crate::cpu::utils::read_word;
 
 pub struct Registers {
     // general purpose registers

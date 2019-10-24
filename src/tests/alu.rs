@@ -1,5 +1,3 @@
-use crate::emux8086::alu::add;
-use crate::emux8086::utils::{write_word, read_word};
 use std::borrow::Borrow;
 
 
