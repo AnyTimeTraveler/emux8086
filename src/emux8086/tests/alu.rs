@@ -1,5 +1,6 @@
 use crate::emux8086::alu::add;
-use crate::emux8086::utils::write_word;
+use crate::emux8086::utils::{write_word, read_word};
+use std::borrow::Borrow;
 
 
 fn expect_add_u8(operand_a: u8, operand_b: u8, result: u8) {
@@ -17,9 +18,7 @@ fn expect_add_u16(operand_a: u16, operand_b: u16, result: u16) {
     write_word(&mut dst, operand_b);
 
     add(&src, &mut dst);
-    let mut result_bytes = [0u8; 2];
-    write_word(&mut result_bytes, result);
-    assert_eq!(dst, result_bytes);
+    assert_eq!(read_word(dst.borrow()), result);
 }
 
 #[test]
