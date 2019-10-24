@@ -1,5 +1,6 @@
 mod cpu;
 mod peripherals;
+mod tui;
 
 #[cfg(test)]
 mod tests;
