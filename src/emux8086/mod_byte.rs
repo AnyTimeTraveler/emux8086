@@ -21,6 +21,7 @@ pub enum InstructionWidth {
 pub enum DataDirection {
     RegToMem,
     MemToReg,
+    RegToReg,
 }
 
 pub fn read_mode(byte: u8) -> AddressingMode {
@@ -33,9 +34,9 @@ pub fn read_mode(byte: u8) -> AddressingMode {
     }
 }
 
-pub fn read_reg(byte: u8, registers: &Registers, width: InstructionWidth) -> usize {
+pub fn read_reg(byte: u8, registers: &Registers, width: &InstructionWidth) -> usize {
     let reg_bits = byte & 0b00111000;
-    if width == EightBits {
+    if *width == EightBits {
         match reg_bits {
             0b00000000 => registers.al,
             0b00001000 => registers.cl,
@@ -47,7 +48,7 @@ pub fn read_reg(byte: u8, registers: &Registers, width: InstructionWidth) -> usi
             0b00111000 => registers.bh,
             _ => panic!("Logic error!")
         }
-    } else if width == SixteenBits {
+    } else if *width == SixteenBits {
         match reg_bits {
             0b00000000 => registers.ax,
             0b00001000 => registers.cx,
